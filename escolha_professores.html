@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha de Professores</title>
+    <link rel="stylesheet" href="css/style_professores.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Escolha um professor para cada disciplina</h2>
+        <form id="professoresForm">
+            <div id="disciplinas-container"></div>
+            <button type="button" id="sortearSala">Sortear Sala</button>
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Recupera as disciplinas selecionadas pelo aluno
+            const disciplinasSelecionadas = JSON.parse(localStorage.getItem("disciplinasSelecionadas")) || [];
+            const professoresCadastrados = JSON.parse(localStorage.getItem("professores")) || [];
+            const container = document.getElementById("disciplinas-container");
+
+            console.log("Disciplinas selecionadas:", disciplinasSelecionadas);
+            console.log("Professores cadastrados:", professoresCadastrados);
+
+            if (disciplinasSelecionadas.length === 0) {
+                container.innerHTML = "<p>Nenhuma disciplina foi selecionada. Volte e escolha as disciplinas.</p>";
+                return;
+            }
+
+            if (professoresCadastrados.length === 0) {
+                container.innerHTML = "<p>Nenhum professor cadastrado. Cadastre professores antes de continuar.</p>";
+                return;
+            }
+
+            disciplinasSelecionadas.forEach(disciplina => {
+                // Filtra os professores que lecionam essa disciplina
+                const professoresFiltrados = professoresCadastrados.filter(prof => {
+                    console.log(`Verificando professor: ${prof.nome} - Disciplina: ${prof.disciplina}`);
+                    return prof.disciplina === disciplina;
+                });
+
+                if (professoresFiltrados.length > 0) {
+                    console.log(`Professores disponíveis para ${disciplina}:`, professoresFiltrados);
+
+                    const div = document.createElement("div");
+                    div.classList.add("disciplina-box");
+                    div.innerHTML = `
+                        <label for="${disciplina}"><strong>${disciplina}:</strong></label>
+                        <select name="${disciplina}" id="${disciplina}">
+                            ${professoresFiltrados.map(prof => `<option value="${prof.nome}">${prof.nome}</option>`).join('')}
+                        </select>
+                    `;
+                    container.appendChild(div);
+                } else {
+                    console.warn(`Nenhum professor disponível para a disciplina: ${disciplina}`);
+                    const div = document.createElement("div");
+                    div.classList.add("disciplina-box");
+                    div.innerHTML = `<p><strong>${disciplina}:</strong> Nenhum professor disponível.</p>`;
+                    container.appendChild(div);
+                }
+            });
+
+            // Função para sortear salas e salvar as escolhas
+            document.getElementById("sortearSala").addEventListener("click", function() {
+                const selecoes = {};
+                disciplinasSelecionadas.forEach(disciplina => {
+                    const selectElement = document.getElementById(disciplina);
+                    if (selectElement) {
+                        const sala = `Sala ${Math.floor(Math.random() * 100) + 1}`; // Sorteio de sala aleatória
+                        selecoes[disciplina] = {
+                            professor: selectElement.value,
+                            sala: sala
+                        };
+                    }
+                });
+
+                localStorage.setItem("professoresESalas", JSON.stringify(selecoes));
+                window.location.href = "resumo_matricula.html";
+            });
+        });
+    </script>
+</body>
+</html>

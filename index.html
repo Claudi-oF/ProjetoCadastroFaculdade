@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha de Disciplinas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <form id="disciplinasForm">
+        <label for="nomeAluno">Nome do Aluno:</label>
+        <input type="text" id="nomeAluno" required><br><br>
+    
+        <h2>Selecione até 4 disciplinas</h2>
+        <div class="disciplinas-list" id="disciplinasContainer">
+            <!-- Disciplinas cadastradas serão adicionadas aqui -->
+        </div>
+        <button type="button" id="proximo">Próximo</button>
+        <button id="limparTudo">Limpar Tudo</button>
+
+    </form>
+    
+    <script>
+        // Função para carregar disciplinas salvas no localStorage
+        function carregarDisciplinas() {
+            const disciplinasContainer = document.getElementById("disciplinasContainer");
+            disciplinasContainer.innerHTML = ""; // Limpa antes de adicionar
+
+            let disciplinas = JSON.parse(localStorage.getItem("disciplinas")) || [];
+            
+            if (disciplinas.length === 0) {
+                disciplinasContainer.innerHTML = "<p>Nenhuma disciplina cadastrada.</p>";
+            } else {
+                disciplinas.forEach(disciplina => {
+                    let label = document.createElement("label");
+                    let checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "disciplina";
+                    checkbox.value = disciplina.nome;
+                    label.appendChild(checkbox);
+                    label.append(` ${disciplina.nome}`);
+                    disciplinasContainer.appendChild(label);
+                    disciplinasContainer.appendChild(document.createElement("br"));
+                });
+            }
+        }
+        
+        //Limpar todo o localStorage
+        document.getElementById("limparTudo").addEventListener("click", function() {
+            localStorage.clear(); // Remove TODOS os dados armazenados
+            alert("Todos os dados foram apagados!");
+            location.reload();
+        });
+
+
+        // Chama a função ao carregar a página
+        document.addEventListener("DOMContentLoaded", carregarDisciplinas);
+
+        document.getElementById("proximo").addEventListener("click", function() {
+            const nomeAluno = document.getElementById("nomeAluno").value.trim();
+            const selecionados = document.querySelectorAll('input[name="disciplina"]:checked');
+
+            if (!nomeAluno) {
+                alert("Por favor, insira o nome do aluno.");
+            } else if (selecionados.length > 4) {
+                alert("Você só pode selecionar até 4 disciplinas.");
+            } else if (selecionados.length === 0) {
+                alert("Selecione pelo menos uma disciplina.");
+            } else {
+                const disciplinasSelecionadas = Array.from(selecionados).map(el => el.value);
+                const numeroMatricula = Math.floor(100000 + Math.random() * 900000); // Geração de número aleatório
+                localStorage.setItem("nomeAluno", nomeAluno);
+                localStorage.setItem("numeroMatricula", numeroMatricula);
+                localStorage.setItem("disciplinasSelecionadas", JSON.stringify(disciplinasSelecionadas));
+
+                window.location.href = "escolha_professores.html";
+            }
+        });
+    </script>
+</body>
+</html>

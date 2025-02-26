@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro do Laboratório</title>
+    <link rel="stylesheet" href="css/style_cadastro.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro do Laboratório</h2>
+        <form id="cadastroLaboratorioForm">
+            <label for="nomeLaboratorio">Nome do Laboratório:</label>
+            <input type="text" id="nomeLaboratorio" name="nomeLaboratorio" required placeholder="Digite o nome do laboratório">
+            <br>
+            <label for="capacidadeLaboratorio">Capacidade:</label>
+            <input type="number" id="capacidadeLaboratorio" name="capacidadeLaboratorio" required placeholder="Digite a capacidade do laboratório">
+            <br>
+            <button type="submit">Cadastrar</button>
+        </form>
+        
+        <!-- Botões adicionais -->
+        <button id="irParaIndex">Ir para Escolha de Disciplinas</button>
+        <button id="voltarCadastroDisciplina">Voltar para Cadastro de Disciplina</button>
+    </div>
+
+    <script>
+        // Função de cadastro
+        document.getElementById("cadastroLaboratorioForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nomeLaboratorio = document.getElementById("nomeLaboratorio").value;
+            const capacidadeLaboratorio = document.getElementById("capacidadeLaboratorio").value;
+
+            if (nomeLaboratorio && capacidadeLaboratorio) {
+                let laboratorios = JSON.parse(localStorage.getItem("laboratorios")) || [];
+                laboratorios.push({ nome: nomeLaboratorio, capacidade: capacidadeLaboratorio });
+                localStorage.setItem("laboratorios", JSON.stringify(laboratorios));
+                alert("Laboratório cadastrado com sucesso!");
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        });
+
+        // Botão para ir para index.html (Escolha de Disciplinas)
+        document.getElementById("irParaIndex").addEventListener("click", function() {
+            window.location.href = "index.html";
+        });
+
+        // Botão para voltar ao cadastro de disciplina
+        document.getElementById("voltarCadastroDisciplina").addEventListener("click", function() {
+            window.location.href = "cadastro_disciplina.html";
+        });
+    </script>
+</body>
+</html>

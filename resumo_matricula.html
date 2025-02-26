@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo da Matrícula</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Resumo da Matrícula</h2>
+        <div id="resumo-container"></div>
+        <button id="salvarSair">Salvar e Sair</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const aluno = JSON.parse(localStorage.getItem("aluno"));
+            const dadosMatricula = JSON.parse(localStorage.getItem("professoresESalas")) || {};
+            const container = document.getElementById("resumo-container");
+
+            if (!aluno || !aluno.nome || !aluno.matricula || Object.keys(dadosMatricula).length === 0) {
+                container.innerHTML = "<p>Dados incompletos. Volte e complete a matrícula.</p>";
+                return;
+            }
+
+            container.innerHTML = `
+                <p><strong>Nome do Aluno:</strong> ${aluno.nome}</p>
+                <p><strong>Número de Matrícula:</strong> ${aluno.matricula}</p>
+                <h3>Disciplinas e Detalhes:</h3>
+            `;
+
+            Object.entries(dadosMatricula).forEach(([disciplina, detalhes]) => {
+                const div = document.createElement("div");
+                div.classList.add("resumo-box");
+                div.innerHTML = `
+                    <p><strong>Disciplina:</strong> ${disciplina}</p>
+                    <p><strong>Professor:</strong> ${detalhes.professor}</p>
+                    <p><strong>Sala de Laboratório:</strong> ${detalhes.sala}</p>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById("salvarSair").addEventListener("click", function() {
+                alert("Matrícula salva com sucesso!");
+                localStorage.clear();
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>

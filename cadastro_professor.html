@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro do Professor</title>
+    <link rel="stylesheet" href="css/style_cadastro.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro do Professor</h2>
+        <form id="cadastroProfessorForm">
+            <label for="nomeProfessor">Nome do Professor:</label>
+            <input type="text" id="nomeProfessor" name="nomeProfessor" required placeholder="Digite o nome do professor">
+            <br>
+            <label for="areaProfessor">Área de Atuação:</label>
+            <input type="text" id="areaProfessor" name="areaProfessor" required placeholder="Digite a área de atuação">
+            <br>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("cadastroProfessorForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nomeProfessor = document.getElementById("nomeProfessor").value;
+            const areaProfessor = document.getElementById("areaProfessor").value;
+
+            if(nomeProfessor && areaProfessor) {
+                let professores = JSON.parse(localStorage.getItem("professores")) || [];
+                professores.push({ nome: nomeProfessor, disciplina: areaProfessor });
+                localStorage.setItem("professores", JSON.stringify(professores));
+                alert("Professor cadastrado com sucesso!");
+                // Redirecionar para a tela de cadastro de laboratório
+                window.location.href = "cadastro_laboratorio.html";
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        });
+    </script>
+</body>
+</html>

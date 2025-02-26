@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Disciplina</title>
+    <link rel="stylesheet" href="css/style_cadastro.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro da Disciplina</h2>
+        <form id="cadastroDisciplinaForm">
+            <label for="nomeDisciplina">Nome da Disciplina:</label>
+            <input type="text" id="nomeDisciplina" name="nomeDisciplina" required placeholder="Digite o nome da disciplina">
+            <br>
+            <label for="codigoDisciplina">Código da Disciplina:</label>
+            <input type="text" id="codigoDisciplina" name="codigoDisciplina" required placeholder="Digite o código da disciplina">
+            <br>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("cadastroDisciplinaForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nomeDisciplina = document.getElementById("nomeDisciplina").value;
+            const codigoDisciplina = document.getElementById("codigoDisciplina").value;
+
+            if(nomeDisciplina && codigoDisciplina) {
+                let disciplinas = JSON.parse(localStorage.getItem("disciplinas")) || [];
+                disciplinas.push({ nome: nomeDisciplina, codigo: codigoDisciplina });
+                localStorage.setItem("disciplinas", JSON.stringify(disciplinas));
+                alert("Disciplina cadastrada com sucesso!");
+                // Redirecionar para a tela de cadastro de professor
+                window.location.href = "cadastro_professor.html";
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        });
+    </script>
+</body>
+</html>

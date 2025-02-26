@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Matrícula</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Confirmação da Matrícula</h2>
+        <div id="confirmacao-container"></div>
+        <button id="finalizarMatricula">Finalizar Matrícula</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dadosMatricula = JSON.parse(localStorage.getItem("professoresESalas")) || {};
+
+            const container = document.getElementById("confirmacao-container");
+
+            if (Object.keys(dadosMatricula).length === 0) {
+                container.innerHTML = "<p>Nenhuma informação encontrada. Volte e selecione as disciplinas.</p>";
+                return;
+            }
+
+            Object.entries(dadosMatricula).forEach(([disciplina, detalhes]) => {
+                const div = document.createElement("div");
+                div.classList.add("confirmacao-box");
+                div.innerHTML = `
+                    <p><strong>Disciplina:</strong> ${disciplina}</p>
+                    <p><strong>Professor:</strong> ${detalhes.professor}</p>
+                    <p><strong>Sala de Laboratório:</strong> ${detalhes.sala}</p>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById("finalizarMatricula").addEventListener("click", function() {
+                alert("Matrícula finalizada com sucesso!");
+                localStorage.clear();
+                window.location.href = "resumo_matricula.html";
+            });
+        });
+    </script>
+</body>
+</html>

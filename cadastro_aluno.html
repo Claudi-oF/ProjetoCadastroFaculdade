@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro do Aluno</title>
+    <link rel="stylesheet" href="css/style_cadastro.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro do Aluno</h2>
+        <form id="cadastroAlunoForm">
+            <label for="nomeAluno">Nome:</label>
+            <input type="text" id="nomeAluno" name="nomeAluno" required placeholder="Digite seu nome">
+            <br>
+            <label for="numeroMatricula">Número de Matrícula:</label>
+            <input type="text" id="numeroMatricula" name="numeroMatricula" required placeholder="Digite seu número de matrícula">
+            <br>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("cadastroAlunoForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nomeAluno = document.getElementById("nomeAluno").value;
+            const numeroMatricula = document.getElementById("numeroMatricula").value;
+
+            if(nomeAluno && numeroMatricula) {
+                localStorage.setItem("aluno", JSON.stringify({ nome: nomeAluno, matricula: numeroMatricula }));
+                alert("Aluno cadastrado com sucesso!");
+                window.location.href = "cadastro_disciplina.html";
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        });
+    </script>
+</body>
+</html>
