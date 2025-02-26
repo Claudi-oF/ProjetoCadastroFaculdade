@@ -19,8 +19,19 @@
             const dadosMatricula = JSON.parse(localStorage.getItem("professoresESalas")) || {};
             const container = document.getElementById("resumo-container");
 
-            if (!aluno || !aluno.nome || !aluno.matricula || Object.keys(dadosMatricula).length === 0) {
-                container.innerHTML = "<p>Dados incompletos. Volte e complete a matrícula.</p>";
+            if (!aluno || !aluno.nome || !aluno.matricula) {
+                container.innerHTML = "<p>Erro: Nenhum aluno cadastrado. Volte para o cadastro de aluno.</p>";
+                return;
+            }
+
+            const alunoIndex = localStorage.getItem("nomeAluno");
+            if (!alunoIndex || alunoIndex !== aluno.nome) {
+                container.innerHTML = "<p>Erro: O aluno inserido no início não está cadastrado.</p>";
+                return;
+            }
+
+            if (Object.keys(dadosMatricula).length === 0) {
+                container.innerHTML = "<p>Erro: Dados incompletos. Volte e complete a matrícula.</p>";
                 return;
             }
 
@@ -43,7 +54,6 @@
 
             document.getElementById("salvarSair").addEventListener("click", function() {
                 alert("Matrícula salva com sucesso!");
-                localStorage.clear();
                 window.location.href = "index.html";
             });
         });
